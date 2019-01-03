@@ -1,0 +1,13 @@
+package com.capgemini.springBasics;
+
+/**
+ * Hello world!
+ *
+ */
+public class SpringBasic 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World!" );
+    }
+}
