@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<bean name="customerRepository" 						
+		class="com.capgemini.repository.HibernateCustomerRepositoryImpl"/>			<!-- setter method setCustomerRepository-->
+	
+	<!-- <bean name="customerService" class="com.capgemini.service.CustomerServiceImpl">
+		<constructor-arg index="0" ref ="customerRepository" />
+	</bean> -->
+	
+	
+	<!-- AUTOWIRING -->
+<!-- 	<bean name="customerService" class="com.capgemini.service.CustomerServiceImpl" autowire="constructor"/>   constructor will be called
+-->
+
+<!-- 	<bean name="customerService" class="com.capgemini.service.CustomerServiceImpl" autowire="byName"/>   -->  <!-- setter method wiil be called i.e. setCustomerRepository  -->
+	
+	<bean name="customerService" class="com.capgemini.service.CustomerServiceImpl" autowire="byType"/>  <!-- will run even if the setter method name is different -->
+</beans>
