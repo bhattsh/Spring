@@ -10,9 +10,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private CustomerRepository customerRepository = new HibernateCustomerRepositoryImpl();
 
-	/* (non-Javadoc)
-	 * @see com.sapgemini.service.CustomerService#findAll()
-	 */
 	@Override
 	public List<Customer> findAll() {
 		return customerRepository.findAll();
