@@ -5,16 +5,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moneymoney.account.SavingsAccount;
 import com.moneymoney.account.dao.SavingsAccountDAO;
 import com.moneymoney.account.factory.AccountFactory;
-import com.moneymoney.account.util.DBUtil;
 import com.moneymoney.exception.AccountNotFoundException;
 import com.moneymoney.exception.InsufficientFundsException;
 import com.moneymoney.exception.InvalidInputException;
 
 @Service	
+@Transactional(rollbackFor= {Throwable.class})
 public class SavingsAccountServiceImpl implements SavingsAccountService {
 
 	private AccountFactory factory;
@@ -46,12 +47,12 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 			double currentBalance = account.getBankAccount().getAccountBalance();
 			currentBalance += amount;
 			savingsAccountDAO.updateBalance(account.getBankAccount().getAccountNumber(), currentBalance);
-//			savingsAccountDAO.updateBalance(account.getBankAccount().getAccountNumber(), currentBalance);
-			//savingsAccountDAO.commit();
+
 		}else {
 			throw new InvalidInputException("Invalid Input Amount!");
 		}
 	}
+	
 	@Override
 	public void withdraw(SavingsAccount account, double amount) throws ClassNotFoundException, SQLException {
 		double currentBalance = account.getBankAccount().getAccountBalance();
@@ -68,25 +69,12 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 	@Override
 	public void fundTransfer(SavingsAccount sender, SavingsAccount receiver, double amount)
 			throws ClassNotFoundException, SQLException {
-		try {
-			withdraw(sender, amount);
+		
 			deposit(receiver, amount);
-			DBUtil.commit();
-		} catch (InvalidInputException | InsufficientFundsException e) {
-			e.printStackTrace();
-			DBUtil.rollback();
-		} catch(Exception e) {
-			e.printStackTrace();
-			DBUtil.rollback();
-		}
-	}
+			withdraw(sender, amount);
 
-/*	@Override
-	public SavingsAccount updateAccount(int accountNumber, int toUpdate, String update) throws ClassNotFoundException, SQLException, AccountNotFoundException 
-	{
-		return savingsAccountDAO.updateAccount(accountNumber, toUpdate, update);
-	}
-*/
+		}
+
 	
 	@Override
 	public SavingsAccount updateAccount(SavingsAccount savingAccountToUpdate) throws ClassNotFoundException, SQLException {
