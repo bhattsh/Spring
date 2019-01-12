@@ -55,6 +55,25 @@ public class AccountValidation {
 		}
 	}
 	
+	@Around("execution(* com.moneymoney.account.service.SavingsAccountServiceImpl.fundTransfer(..))")
+	public void validateFundTransfer(ProceedingJoinPoint pjp) throws Throwable {
+		Object[] parameters = pjp.getArgs();
+		
+		SavingsAccount sendersSavingAccount = (SavingsAccount) parameters[0];
+		SavingsAccount recieverSavingAccount = (SavingsAccount) parameters[1];
+		double amountTotransfer = (Double)parameters[2];
+		
+		if(sendersSavingAccount.getBankAccount().getAccountBalance() < amountTotransfer)
+			logger.info("Insufficient Balance");
+		else if(amountTotransfer <= 0)
+			logger.info("please enter a valid amount");
+		else {
+			pjp.proceed();
+			logger.info("amount transferred successfully");
+		}
+
+		
+	}
 
 	/*
 	 * @Around("execution(* com.moneymoney.account.service.SavingsAccountServiceImpl.withdraw(..))"

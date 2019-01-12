@@ -27,7 +27,8 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 		template.update("INSERT INTO ACCOUNT( account_hn, account_balance, account_isSalary, account_type, odLimit) VALUES(?,?,?,?,?)", 
 				new Object[] {account.getBankAccount().getAccountHolderName(),
 						 account.getBankAccount().getAccountBalance(),account.isSalary(), "SA", null});
-		return null;
+		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new AccountMapper());
+		return savingsAccount;
 	}
 
 	
