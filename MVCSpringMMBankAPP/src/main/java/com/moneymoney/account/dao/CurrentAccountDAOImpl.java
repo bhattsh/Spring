@@ -1,22 +1,40 @@
 package com.moneymoney.account.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.moneymoney.account.CurrentAccount;
+import com.moneymoney.account.SavingsAccount;
 import com.moneymoney.exception.AccountNotFoundException;
 
 public class CurrentAccountDAOImpl implements CurrentAccountDAO {
 
+	@Autowired
+	JdbcTemplate template;
+	
+	Logger logger = Logger.getLogger(SavingsAccountSJDAOImpl.class.getName());
+	
 	
 	public CurrentAccount createNewAccount(CurrentAccount account) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return null;
+
+		logger.info("hello from new DAO layer");
+		
+		System.out.println(account);
+//		template.update("INSERT INTO ACCOUNT( account_hn, account_balance, account_isSalary, account_type, odLimit) VALUES(?,?,?,?,?)", 
+//				new Object[] {account.getBankAccount().getAccountHolderName(),
+//						 account.getBankAccount().getAccountBalance(), false, "CA", account.getOdLimit()});
+		
+		template.update("INSERT INTO ACCOUNT VALUES(?,?,?,?,?)", 
+				new Object[] {account.getBankAccount().getAccountHolderName(),
+						 account.getBankAccount().getAccountBalance(), false, "CA", account.getOdLimit()});
+		
+//		CurrentAccount currentAccount =  (CurrentAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new CurrentAccountMapper());
+		return account;
+
 	}
 
 	

@@ -3,6 +3,9 @@ package com.moneymoney.account.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.moneymoney.account.CurrentAccount;
 import com.moneymoney.account.dao.CurrentAccountDAO;
 import com.moneymoney.account.dao.CurrentAccountDAOImpl;
@@ -11,6 +14,8 @@ import com.moneymoney.exception.AccountNotFoundException;
 import com.moneymoney.exception.InsufficientFundsException;
 import com.moneymoney.exception.InvalidInputException;
 
+@Service
+@Transactional(rollbackFor= {Throwable.class})
 public class CurrentAccountServiceImpl implements CurrentAccountService {
 
 	private AccountFactory factory;
@@ -24,8 +29,8 @@ public class CurrentAccountServiceImpl implements CurrentAccountService {
 	
 	public CurrentAccount createNewAccount(String accountHolderName, double accountBalance, double odLimit)throws ClassNotFoundException, SQLException {
 		CurrentAccount account = factory.createNewCurrentAccount(accountHolderName, accountBalance, odLimit);
-		currentAccountDAO.createNewAccount(account);
-		return null;
+		return currentAccountDAO.createNewAccount(account);
+		
 	}
 
 	

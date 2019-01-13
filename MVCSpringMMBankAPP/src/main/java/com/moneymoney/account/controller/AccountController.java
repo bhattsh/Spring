@@ -8,11 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.moneymoney.account.CurrentAccount;
 import com.moneymoney.account.SavingsAccount;
+import com.moneymoney.account.service.CurrentAccountService;
 import com.moneymoney.account.service.SavingsAccountService;
 import com.moneymoney.exception.AccountNotFoundException;
 
@@ -21,18 +22,27 @@ public class AccountController {
 
 	@Autowired
 	private SavingsAccountService savingsAccountService;
-	private boolean toSortIn=false;
+	@Autowired
+	private CurrentAccountService currentAccountService;
 
+	private boolean toSortIn=false;
+	
+	
 	@RequestMapping("/welcome") // spring-mvc
 	public String home() {
 		return "index";
 	}
 
-	@RequestMapping("/createAccountRequest")
-	public String createAccount() {
-		return "createAccountForm";
+	@RequestMapping("/createSavingsAccountRequest")
+	public String createSavingAccountRequest() {
+		return "createSavingAccountForm";
 	}
 
+	@RequestMapping("/createCurrentAccountRequest")
+	public String createCurrentAccountRequest() {
+		return "createCurrentAccountForm";
+	}
+	
 	@RequestMapping("/updateAccountRequest")
 	public String searchAccount() {
 		return "updateAccountForm";
@@ -70,14 +80,26 @@ public class AccountController {
 	 * SavingsAccount account = savingsAccountService.createNewAccount(name,
 	 * initialBalance, salaried); return "redirect:getAll"; }
 	 */
+	
 	@RequestMapping("/createSavingAccount")
 	public String createSavingAccount(@RequestParam("accountHolderName") String accountHolderName, @RequestParam("accountBalance") double initialBalance,
-			@RequestParam("accountType") String accountType,@RequestParam("salaried") String salaried, Model model)
+			@RequestParam("salaried") String salaried, Model model)
 			throws ClassNotFoundException, SQLException {
 		
 		boolean salariedOrNot = salaried.equalsIgnoreCase("yes")?true:false;
-		
+
 		SavingsAccount account = savingsAccountService.createNewAccount(accountHolderName,initialBalance, salariedOrNot); 
+		model.addAttribute("account", account);
+		return "AccountDetails";
+	}
+	
+	
+	@RequestMapping("/createCurrentAccount")
+	public String createCurrentAccount(@RequestParam("accountHolderName") String accountHolderName, @RequestParam("accountBalance") double initialBalance,
+			@RequestParam("odLimit") double odLimit, Model model)
+			throws ClassNotFoundException, SQLException {
+		
+		CurrentAccount account = currentAccountService.createNewAccount(accountHolderName, initialBalance, odLimit); 
 		model.addAttribute("account", account);
 		return "AccountDetails";
 	}

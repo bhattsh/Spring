@@ -3,7 +3,12 @@ package com.moneymoney.account;
 public class SavingsAccount {
 	private boolean salary;
 	private BankAccount bankAccount;
+	
+	
 
+	public SavingsAccount() {
+		super();
+	}
 	public SavingsAccount(String accountHolderName, double accountBalance, boolean salary) {
 		bankAccount = new BankAccount(accountHolderName, accountBalance);
 		this.salary = salary;

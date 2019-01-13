@@ -27,7 +27,8 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 		template.update("INSERT INTO ACCOUNT( account_hn, account_balance, account_isSalary, account_type, odLimit) VALUES(?,?,?,?,?)", 
 				new Object[] {account.getBankAccount().getAccountHolderName(),
 						 account.getBankAccount().getAccountBalance(),account.isSalary(), "SA", null});
-		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new AccountMapper());
+		
+		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new SavingsAccountMapper());
 		return savingsAccount;
 	}
 
@@ -35,7 +36,7 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 	public SavingsAccount getAccountById(int accountNumber)
 			throws AccountNotFoundException {
 		
-		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account where account_id=?", new Object[] {accountNumber}, new AccountMapper());
+		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account where account_id=?", new Object[] {accountNumber}, new SavingsAccountMapper());
 		return savingsAccount;
 	}
 
@@ -50,7 +51,7 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 
 	
 	public List<SavingsAccount> getAllSavingsAccount() {
-		List<SavingsAccount> savingsAccountList =  template.query("SELECT * FROM account",new AccountMapper());
+		List<SavingsAccount> savingsAccountList =  template.query("SELECT * FROM account",new SavingsAccountMapper());
 		return savingsAccountList;
 	}
 
@@ -63,7 +64,7 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 	
 	public SavingsAccount getAccountByName(String nameToSearch)
 			throws AccountNotFoundException {
-		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account where account_hn=?", new Object[] {nameToSearch}, new AccountMapper());
+		SavingsAccount savingsAccount =  (SavingsAccount) template.queryForObject("SELECT * FROM account where account_hn=?", new Object[] {nameToSearch}, new SavingsAccountMapper());
 		return savingsAccount;
 	}
 
@@ -71,12 +72,12 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 	public SavingsAccount updateAccount(SavingsAccount savingAccountToUpdate) {
 		int rowsAffected = template.update("UPDATE ACCOUNT SET account_hn=?, account_balance=?, account_isSalary=? WHERE account_id=?",new Object[] {savingAccountToUpdate.getBankAccount().getAccountHolderName(),savingAccountToUpdate.getBankAccount().getAccountBalance(), savingAccountToUpdate.isSalary(),savingAccountToUpdate.getBankAccount().getAccountNumber()});
 		
-		return rowsAffected==0? null : (SavingsAccount) template.queryForObject("SELECT * FROM account where account_id=?", new Object[] {savingAccountToUpdate.getBankAccount().getAccountNumber()}, new AccountMapper());
+		return rowsAffected==0? null : (SavingsAccount) template.queryForObject("SELECT * FROM account where account_id=?", new Object[] {savingAccountToUpdate.getBankAccount().getAccountNumber()}, new SavingsAccountMapper());
 	}
 
 	
 	public List<SavingsAccount> getAccountByBalanceRange(double minimumBalance, double highestBalance) {
-		 return template.query("SELECT * FROM account where account_balance BETWEEN ? AND ?",new Object[] {minimumBalance,highestBalance},new AccountMapper()); 
+		 return template.query("SELECT * FROM account where account_balance BETWEEN ? AND ?",new Object[] {minimumBalance,highestBalance},new SavingsAccountMapper()); 
 	}
 
 	
