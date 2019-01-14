@@ -18,7 +18,7 @@ import com.moneymoney.account.service.SavingsAccountService;
 import com.moneymoney.exception.AccountNotFoundException;
 
 @Controller // context
-public class AccountController {
+public class SavingsAccountController {
 
 	@Autowired
 	private SavingsAccountService savingsAccountService;
@@ -37,11 +37,10 @@ public class AccountController {
 	public String createSavingAccountRequest() {
 		return "createSavingAccountForm";
 	}
-
-	@RequestMapping("/createCurrentAccountRequest")
-	public String createCurrentAccountRequest() {
-		return "createCurrentAccountForm";
-	}
+	/*
+	 * @RequestMapping("/createCurrentAccountRequest") public String
+	 * createCurrentAccountRequest() { return "createCurrentAccountForm"; }
+	 */
 	
 	@RequestMapping("/updateAccountRequest")
 	public String searchAccount() {
@@ -94,16 +93,19 @@ public class AccountController {
 	}
 	
 	
-	@RequestMapping("/createCurrentAccount")
-	public String createCurrentAccount(@RequestParam("accountHolderName") String accountHolderName, @RequestParam("accountBalance") double initialBalance,
-			@RequestParam("odLimit") double odLimit, Model model)
-			throws ClassNotFoundException, SQLException {
-		
-		CurrentAccount account = currentAccountService.createNewAccount(accountHolderName, initialBalance, odLimit); 
-		model.addAttribute("account", account);
-		return "AccountDetails";
-	}
-	
+	/*
+	 * @RequestMapping("/createCurrentAccount") public String
+	 * createCurrentAccount(@RequestParam("accountHolderName") String
+	 * accountHolderName, @RequestParam("accountBalance") double initialBalance,
+	 * 
+	 * @RequestParam("odLimit") double odLimit, Model model) throws
+	 * ClassNotFoundException, SQLException {
+	 * 
+	 * CurrentAccount currentAccount =
+	 * currentAccountService.createNewAccount(accountHolderName, initialBalance,
+	 * odLimit); model.addAttribute("currentAccount", currentAccount); return
+	 * "AccountDetails"; }
+	 */
 	
 	@RequestMapping("/closeAccountRequest")
 	public String deleteAccountRequest() {
@@ -114,7 +116,7 @@ public class AccountController {
 	public String deleteAccount(@RequestParam("accountNumber") int accountToDelete) throws ClassNotFoundException, SQLException
 	{
 		savingsAccountService.deleteAccount(accountToDelete);
-		return "redirect:getAll";
+		return "redirect:getAllSavingsAccount";
 	}
 	
 	
@@ -268,17 +270,20 @@ public class AccountController {
 		model.addAttribute("accounts", accounts);
 		return "AccountDetails";
 	}
-	
-	
-	
-	
-	
-	@RequestMapping("/getAll")
+
+	@RequestMapping("/getAllSavingsAccount")
 	public String getAllAccount(Model model) throws ClassNotFoundException, SQLException {
 		List<SavingsAccount> accounts = savingsAccountService.getAllSavingsAccount();
 		System.out.println(accounts);
 		model.addAttribute("accounts", accounts);
 		return "AccountDetails";
 	}
-
+	
+	/*
+	 * @RequestMapping("/getAllCurrentAccount") public String
+	 * getAllCurrentAccount(Model model) throws ClassNotFoundException, SQLException
+	 * { List<CurrentAccount> accounts =
+	 * currentAccountService.getAllCurrentAccount(); System.out.println(accounts);
+	 * model.addAttribute("currentAccounts", accounts); return "AccountDetails"; }
+	 */
 }

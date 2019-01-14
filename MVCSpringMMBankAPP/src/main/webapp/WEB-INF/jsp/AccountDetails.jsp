@@ -7,6 +7,17 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+
+<style>
+	
+	.updateButton
+	{
+		position:relative;
+		top:100px;
+		left:300px;
+		
+	}
+</style>
 </head>
 <body>
 
@@ -26,7 +37,7 @@
 			<tr>
 				<td><input type="text" name="accountNumber" value ="${account.bankAccount.accountNumber}" readonly></td>
 				<td><input type="text" name="newName" value ="${account.bankAccount.accountHolderName}"></td>
-				<td><input type="text" name="accountBalance" value ="${account.bankAccount.accountBalance}" readonly></td>
+				<td><input type="number" name="accountBalance" value ="${account.bankAccount.accountBalance}" readonly></td>
 				<td>
 					<select name="newSalaried">
 						<option selected>${account.salary==true?"Yes":"No"}</option>		<!-- value in database will be seen selected -->
@@ -36,10 +47,20 @@
 				<td>${"N/A"}</td>
 				<td><input type="text" name="accountType" value ="Saving" readonly></td>
 			</tr>
-				<input type = "submit" value = "update">	
+				<input class ="updateButton"  type="submit" value = "update">	
 		</jstl:if>
 	
-	
+	<jstl:if test="${currentAccount!=null}">
+				<tr>
+				<td><input type="text" name="accountNumber" value ="${currentAccount.bankAccount.accountNumber}" readonly></td>
+				<td><input type="text" name="newName" value ="${currentAccount.bankAccount.accountHolderName}"></td>
+				<td><input type="number" name="accountBalance" value ="${currentAccount.bankAccount.accountBalance}" readonly></td>
+				<td><input type="text" name="salaried" value ="No" readonly></td>
+				<td><input type="number" name="odLimit" value ="${currentAccount.odLimit}" readonly></td>
+				<td><input type="text" name="accountType" value ="Current" readonly></td>
+			</tr>
+				<input  class ="updateButton" type = "submit" value = "update">	
+		</jstl:if>
 		
 		<jstl:if test="${accounts!=null}">
 			<jstl:forEach var="account" items="${accounts}">
@@ -50,6 +71,20 @@
 					<td>${account.salary==true?"Yes":"No"}</td>
 					<td>${"N/A"}</td>
 					<td><input type="text" name ="typeOfAccount" value ='${"Savings"}' readonly></td>
+				</tr>
+			</jstl:forEach>
+		</jstl:if>
+		
+		
+		<jstl:if test="${currentAccounts!=null}">
+			<jstl:forEach var="currentAccounts" items="${currentAccounts}">
+				<tr>
+					<td>${currentAccounts.bankAccount.accountNumber}</td>
+					<td>${currentAccounts.bankAccount.accountHolderName }</td>
+					<td>${currentAccounts.bankAccount.accountBalance}</td>
+					<td>${"No"}</td>
+					<td>${currentAccounts.odLimit}</td>
+					<td>${"Current"}</td>
 				</tr>
 			</jstl:forEach>
 		</jstl:if>

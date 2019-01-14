@@ -3,12 +3,12 @@ package com.moneymoney.account.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.moneymoney.account.CurrentAccount;
 import com.moneymoney.account.dao.CurrentAccountDAO;
-import com.moneymoney.account.dao.CurrentAccountDAOImpl;
 import com.moneymoney.account.factory.AccountFactory;
 import com.moneymoney.exception.AccountNotFoundException;
 import com.moneymoney.exception.InsufficientFundsException;
@@ -19,11 +19,12 @@ import com.moneymoney.exception.InvalidInputException;
 public class CurrentAccountServiceImpl implements CurrentAccountService {
 
 	private AccountFactory factory;
+	
+	@Autowired
 	private CurrentAccountDAO currentAccountDAO;
 
 	public CurrentAccountServiceImpl() {
 		factory = AccountFactory.getInstance();
-		currentAccountDAO = new CurrentAccountDAOImpl();
 	}
 
 	

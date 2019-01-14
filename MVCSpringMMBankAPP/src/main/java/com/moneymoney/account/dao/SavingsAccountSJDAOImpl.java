@@ -51,7 +51,7 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 
 	
 	public List<SavingsAccount> getAllSavingsAccount() {
-		List<SavingsAccount> savingsAccountList =  template.query("SELECT * FROM account",new SavingsAccountMapper());
+		List<SavingsAccount> savingsAccountList =  template.query("SELECT * FROM account WHERE account_type='SA'",new SavingsAccountMapper());
 		return savingsAccountList;
 	}
 

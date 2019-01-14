@@ -6,11 +6,13 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.moneymoney.account.CurrentAccount;
 import com.moneymoney.account.SavingsAccount;
 import com.moneymoney.exception.AccountNotFoundException;
 
+@Repository
 public class CurrentAccountDAOImpl implements CurrentAccountDAO {
 
 	@Autowired
@@ -21,19 +23,19 @@ public class CurrentAccountDAOImpl implements CurrentAccountDAO {
 	
 	public CurrentAccount createNewAccount(CurrentAccount account) throws ClassNotFoundException, SQLException {
 
-		logger.info("hello from new DAO layer");
+		logger.info("Inserting data in database");
 		
 		System.out.println(account);
 //		template.update("INSERT INTO ACCOUNT( account_hn, account_balance, account_isSalary, account_type, odLimit) VALUES(?,?,?,?,?)", 
 //				new Object[] {account.getBankAccount().getAccountHolderName(),
 //						 account.getBankAccount().getAccountBalance(), false, "CA", account.getOdLimit()});
 		
-		template.update("INSERT INTO ACCOUNT VALUES(?,?,?,?,?)", 
+		template.update("INSERT INTO ACCOUNT ( account_hn, account_balance, account_isSalary, account_type, odLimit) VALUES(?,?,?,?,?)", 
 				new Object[] {account.getBankAccount().getAccountHolderName(),
 						 account.getBankAccount().getAccountBalance(), false, "CA", account.getOdLimit()});
 		
-//		CurrentAccount currentAccount =  (CurrentAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new CurrentAccountMapper());
-		return account;
+		CurrentAccount currentAccount =  (CurrentAccount) template.queryForObject("SELECT * FROM account ORDER BY account_id  DESC LIMIT 1", new CurrentAccountMapper());
+		return currentAccount;
 
 	}
 
@@ -52,8 +54,8 @@ public class CurrentAccountDAOImpl implements CurrentAccountDAO {
 
 	
 	public List<CurrentAccount> getAllCurrentAccount() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<CurrentAccount> currentAccountList =  template.query("SELECT * FROM account WHERE account_type='CA'",new CurrentAccountMapper());
+		return currentAccountList;
 	}
 
 	
